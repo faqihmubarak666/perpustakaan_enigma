@@ -169,6 +169,36 @@ func (s PerpustakaanRepoImpl) GetFindBookByPublisher(namaPenerbit string) ([]*mo
 	return dataPenerbit, nil
 }
 
+func (s PerpustakaanRepoImpl) GetTotalBook() (*models.ReportBook, error) {
+	var buku models.ReportBook
+	query := constantaQuery.GETTOTALBOOK
+	err := s.db.QueryRow(query).Scan(&buku.TotalBook)
+	if err != nil {
+		return nil, err
+	}
+	fmt.Println("Total data buku sukses di tampikan")
+	return &buku, nil
+}
+
+func (s PerpustakaanRepoImpl) GetTotalBookCategory() ([]*models.ReportBookCategory, error) {
+	dataBuku := []*models.ReportBookCategory{}
+	query := constantaQuery.GETTOTALBOOKCATEGORY
+	data, err := s.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	for data.Next() {
+		buku := models.ReportBookCategory{}
+		var err = data.Scan(&buku.TotalBook, &buku.NamaKategori)
+		if err != nil {
+			return nil, err
+		}
+		dataBuku = append(dataBuku, &buku)
+	}
+	fmt.Println("Data Sukses di Tampikan")
+	return dataBuku, nil
+}
+
 func InitPerpustakaanRepoImpl(db *sql.DB) PerpustakaanRepository {
 	return &PerpustakaanRepoImpl{db}
 }

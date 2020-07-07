@@ -12,4 +12,6 @@ type PerpustakaanUsecase interface {
 	GetFindBookByTitle(judulBuku string) (*models.AllBook, error)
 	GetFindBookByAuthor(namaPengarang string) ([]*models.AllBook, error)
 	GetFindBookByPublisher(namaPenerbit string) ([]*models.AllBook, error)
+	GetTotalBook() (*models.ReportBook, error)
+	GetTotalBookCategory() ([]*models.ReportBookCategory, error)
 }

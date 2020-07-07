@@ -91,6 +91,22 @@ func (s PerpustakaanUsecaseImpl) GetFindBookByPublisher(namaPenerbit string) ([]
 	return penerbit, nil
 }
 
+func (s PerpustakaanUsecaseImpl) GetTotalBook() (*models.ReportBook, error) {
+	totalBuku, err := s.PerpustakaanRepo.GetTotalBook()
+	if err != nil {
+		return nil, err
+	}
+	return totalBuku, nil
+}
+
+func (s PerpustakaanUsecaseImpl) GetTotalBookCategory() ([]*models.ReportBookCategory, error) {
+	buku, err := s.PerpustakaanRepo.GetTotalBookCategory()
+	if err != nil {
+		return nil, err
+	}
+	return buku, nil
+}
+
 func InitPerpustakaanUseCase(PerpustakaanRepo repositories.PerpustakaanRepository) PerpustakaanUsecase {
 	return &PerpustakaanUsecaseImpl{PerpustakaanRepo}
 }

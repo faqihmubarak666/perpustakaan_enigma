@@ -18,3 +18,12 @@ type AllBook struct {
 	NamaPengarang string `json:"nama_pengarang"`
 	NamaPenerbit  string `json:"nama_penerbit"`
 }
+
+type ReportBook struct {
+	TotalBook string `json:"total_buku"`
+}
+
+type ReportBookCategory struct {
+	TotalBook    string `json:"total_buku"`
+	NamaKategori string `json:"nama_kategori"`
+}

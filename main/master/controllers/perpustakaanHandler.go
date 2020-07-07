@@ -20,14 +20,16 @@ func PerpustakaanController(r *mux.Router, service usecases.PerpustakaanUsecase)
 	perpustakaanHandler := PerpustakaanHandler{service}
 
 	r.Use(middleware.ActivityLogMiddleware)
-	r.HandleFunc("/perpustakaan", perpustakaanHandler.AllBook).Methods(http.MethodGet)
-	r.HandleFunc("/perpustakaan", perpustakaanHandler.AddBook).Methods(http.MethodPost)
-	r.HandleFunc("/perpustakaan", perpustakaanHandler.UpdateBook).Methods(http.MethodPut)
-	r.HandleFunc("/perpustakaan/{id_buku}", perpustakaanHandler.DeleteBook).Methods(http.MethodDelete)
+	r.HandleFunc("/book", perpustakaanHandler.AllBook).Methods(http.MethodGet)
+	r.HandleFunc("/book", perpustakaanHandler.AddBook).Methods(http.MethodPost)
+	r.HandleFunc("/book", perpustakaanHandler.UpdateBook).Methods(http.MethodPut)
+	r.HandleFunc("/book/{id_buku}", perpustakaanHandler.DeleteBook).Methods(http.MethodDelete)
 	r.HandleFunc("/findBookByCategory/{nama_kategori}", perpustakaanHandler.FindBookByCategory).Methods(http.MethodGet)
 	r.HandleFunc("/findBookByTitle/{judul_buku}", perpustakaanHandler.FindBookByTitle).Methods(http.MethodGet)
 	r.HandleFunc("/findBookByAuthor/{nama_pengarang}", perpustakaanHandler.FindBookByAuthor).Methods(http.MethodGet)
 	r.HandleFunc("/findBookByPublisher/{nama_penerbit}", perpustakaanHandler.FindBookByPublisher).Methods(http.MethodGet)
+	r.HandleFunc("/ReportTotalBook", perpustakaanHandler.TotalBook).Methods(http.MethodGet)
+	r.HandleFunc("/ReportTotalBookCategory", perpustakaanHandler.TotalBookCategory).Methods(http.MethodGet)
 }
 
 func (s PerpustakaanHandler) AllBook(w http.ResponseWriter, r *http.Request) {
@@ -168,6 +170,38 @@ func (s PerpustakaanHandler) FindBookByPublisher(w http.ResponseWriter, r *http.
 		return
 	}
 	var response response.MyResponse = response.MyResponse{"Data Sukses di Tampikan", http.StatusOK, penerbit}
+	byteOfPerpustakaan, err := json.Marshal(response)
+	if err != nil {
+		w.Write([]byte("Oops something when wrong"))
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(byteOfPerpustakaan)
+}
+
+func (s PerpustakaanHandler) TotalBook(w http.ResponseWriter, r *http.Request) {
+	judulBuku, err := s.PerpustakaanUseCase.GetTotalBook()
+	if err != nil {
+		w.Write([]byte("Data tidak di temukan"))
+		return
+	}
+	var response response.MyResponse = response.MyResponse{"Data Sukses di Tampikan", http.StatusOK, judulBuku}
+	byteOfPerpustakaan, err := json.Marshal(response)
+	if err != nil {
+		w.Write([]byte("Oops something when wrong"))
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(byteOfPerpustakaan)
+}
+
+func (s PerpustakaanHandler) TotalBookCategory(w http.ResponseWriter, r *http.Request) {
+	judulBuku, err := s.PerpustakaanUseCase.GetTotalBookCategory()
+	if err != nil {
+		w.Write([]byte("Data tidak di temukan"))
+		return
+	}
+	var response response.MyResponse = response.MyResponse{"Data Sukses di Tampikan", http.StatusOK, judulBuku}
 	byteOfPerpustakaan, err := json.Marshal(response)
 	if err != nil {
 		w.Write([]byte("Oops something when wrong"))
