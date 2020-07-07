@@ -31,7 +31,7 @@ func ValidateInputNotSymbol(data ...interface{}) error {
 func ValidateInputLenCharacter(min, max int, data ...interface{}) error {
 	for _, value := range data {
 		if len(value.(string)) >= min && len(value.(string)) <= max {
-			return errors.New("Input cannot more 20 character")
+			return errors.New("Input min 5 character dan max 20 character")
 		}
 	}
 	return nil

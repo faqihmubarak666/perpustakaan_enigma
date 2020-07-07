@@ -21,6 +21,13 @@ func (s PerpustakaanUsecaseImpl) GetAllBook() ([]*models.AllBook, error) {
 
 func (s PerpustakaanUsecaseImpl) GetAddBook(buku *models.Perpustakaan) error {
 	err := utils.ValidateInputNotNil(buku.JudulBuku, buku.IdKategori, buku.IdPengarang, buku.IdPenerbit)
+	if err != nil {
+		return err
+	}
+	err = utils.ValidateInputNotSymbol(buku.JudulBuku)
+	if err != nil {
+		return err
+	}
 	err = s.PerpustakaanRepo.GetAddBook(buku)
 	if err != nil {
 		return err
