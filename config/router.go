@@ -15,10 +15,10 @@ func CreateRouter() *mux.Router {
 }
 
 func RunServer(router *mux.Router) {
-	host := utils.ReadEnv("host", "")
-	port := utils.ReadEnv("port", "")
+	host := utils.ReadEnv("serverHost", "")
+	port := utils.ReadEnv("serverPort", "")
+	fmt.Printf("Setting Web Server at host : %v & port : %v ", host, port)
 	hostPort := fmt.Sprintf("%s:%s", host, port)
-	fmt.Println("Setting Web Server at port : " + hostPort)
 	err := http.ListenAndServe(hostPort, router)
 	if err != nil {
 		log.Fatal(err)

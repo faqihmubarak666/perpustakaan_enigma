@@ -53,3 +53,7 @@ insert into pengarang values("Peng01", "aldi fauzi"), ("Peng02", "ryan setiadi")
 create table penerbit (id_penerbit varchar(40) primary key, nama_penerbit varchar(40));
 insert into penerbit values("Bit01", "sinar gemilang"), ("Bit02", "cipta agung"), ("Bit03", "sinar cahaya");
 
+select count(buku.judul_buku) as jumlah_buku, kategori.nama_kategori from buku join kategori on 
+buku.id_kategori=kategori.id_kategori group by nama_kategori;
+
+select count(buku.judul_buku) as total_buku from buku;

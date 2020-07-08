@@ -15,4 +15,9 @@ func Init(r *mux.Router, db *sql.DB) {
 	perpustakaanUseCase := usecases.InitPerpustakaanUseCase(perpustakaanRepo)
 	controllers.PerpustakaanController(r, perpustakaanUseCase)
 
+	//User
+	userRepo := repositories.InitUserRepoImpl(db)
+	userUseCase := usecases.InitUserUsecase(userRepo)
+	controllers.UserController(r, userUseCase)
+
 }

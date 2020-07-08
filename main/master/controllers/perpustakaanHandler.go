@@ -20,16 +20,19 @@ func PerpustakaanController(r *mux.Router, service usecases.PerpustakaanUsecase)
 	perpustakaanHandler := PerpustakaanHandler{service}
 
 	r.Use(middleware.ActivityLogMiddleware)
-	r.HandleFunc("/book", perpustakaanHandler.AllBook).Methods(http.MethodGet)
-	r.HandleFunc("/book", perpustakaanHandler.AddBook).Methods(http.MethodPost)
-	r.HandleFunc("/book", perpustakaanHandler.UpdateBook).Methods(http.MethodPut)
-	r.HandleFunc("/book/{id_buku}", perpustakaanHandler.DeleteBook).Methods(http.MethodDelete)
-	r.HandleFunc("/findBookByCategory/{nama_kategori}", perpustakaanHandler.FindBookByCategory).Methods(http.MethodGet)
-	r.HandleFunc("/findBookByTitle/{judul_buku}", perpustakaanHandler.FindBookByTitle).Methods(http.MethodGet)
-	r.HandleFunc("/findBookByAuthor/{nama_pengarang}", perpustakaanHandler.FindBookByAuthor).Methods(http.MethodGet)
-	r.HandleFunc("/findBookByPublisher/{nama_penerbit}", perpustakaanHandler.FindBookByPublisher).Methods(http.MethodGet)
-	r.HandleFunc("/ReportTotalBook", perpustakaanHandler.TotalBook).Methods(http.MethodGet)
-	r.HandleFunc("/ReportTotalBookCategory", perpustakaanHandler.TotalBookCategory).Methods(http.MethodGet)
+
+	book := r.PathPrefix("/book").Subrouter()
+	book.Use(middleware.TokenValidationMiddleware)
+	book.HandleFunc("", perpustakaanHandler.AllBook).Methods(http.MethodGet)
+	book.HandleFunc("", perpustakaanHandler.AddBook).Methods(http.MethodPost)
+	book.HandleFunc("", perpustakaanHandler.UpdateBook).Methods(http.MethodPut)
+	book.HandleFunc("/{id_buku}", perpustakaanHandler.DeleteBook).Methods(http.MethodDelete)
+	book.HandleFunc("/findBookByCategory/{nama_kategori}", perpustakaanHandler.FindBookByCategory).Methods(http.MethodGet)
+	book.HandleFunc("/findBookByTitle/{judul_buku}", perpustakaanHandler.FindBookByTitle).Methods(http.MethodGet)
+	book.HandleFunc("/findBookByAuthor/{nama_pengarang}", perpustakaanHandler.FindBookByAuthor).Methods(http.MethodGet)
+	book.HandleFunc("/findBookByPublisher/{nama_penerbit}", perpustakaanHandler.FindBookByPublisher).Methods(http.MethodGet)
+	book.HandleFunc("/ReportTotalBook", perpustakaanHandler.TotalBook).Methods(http.MethodGet)
+	book.HandleFunc("/ReportTotalBookCategory", perpustakaanHandler.TotalBookCategory).Methods(http.MethodGet)
 }
 
 func (s PerpustakaanHandler) AllBook(w http.ResponseWriter, r *http.Request) {

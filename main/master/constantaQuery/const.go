@@ -13,4 +13,6 @@ const (
 	GETFINDBOOKBYPUBLISHER = "select buku.id_buku, buku.judul_buku, kategori.nama_kategori, pengarang.nama_pengarang, penerbit.nama_penerbit from buku join kategori on buku.id_kategori=kategori.id_kategori join pengarang on buku.id_pengarang=pengarang.id_pengarang join penerbit on buku.id_penerbit=penerbit.id_penerbit where penerbit.nama_penerbit=?"
 	GETTOTALBOOK           = "select count(buku.judul_buku) as total_buku from buku"
 	GETTOTALBOOKCATEGORY   = "select count(buku.judul_buku) as jumlah_buku, kategori.nama_kategori from buku join kategori on buku.id_kategori=kategori.id_kategori group by nama_kategori;"
+
+	GETUSER = "select username, password from user where username=? and password =?"
 )
