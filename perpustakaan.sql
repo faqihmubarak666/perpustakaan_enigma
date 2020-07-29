@@ -57,3 +57,10 @@ select count(buku.judul_buku) as jumlah_buku, kategori.nama_kategori from buku j
 buku.id_kategori=kategori.id_kategori group by nama_kategori;
 
 select count(buku.judul_buku) as total_buku from buku;
+
+select * from  kategori;
+select * from pengarang;
+select * from penerbit;
+select * from user;
+select * from buku;
+insert into user values ("003", "tika", "123");

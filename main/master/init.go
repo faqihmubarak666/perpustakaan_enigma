@@ -20,4 +20,19 @@ func Init(r *mux.Router, db *sql.DB) {
 	userUseCase := usecases.InitUserUsecase(userRepo)
 	controllers.UserController(r, userUseCase)
 
+	//Category
+	categoryRepo := repositories.InitCategoryRepoImpl(db)
+	categoryUseCase := usecases.InitCategoryUseCase(categoryRepo)
+	controllers.CategoryController(r, categoryUseCase)
+
+	//Author
+	authorRepo := repositories.InitAuthorRepoImpl(db)
+	authorUseCase := usecases.InitAuthorUseCase(authorRepo)
+	controllers.AuthorController(r, authorUseCase)
+
+	//Publisher
+	publisherRepo := repositories.InitPublisherRepoImpl(db)
+	publisherUseCase := usecases.InitPublisherUseCase(publisherRepo)
+	controllers.PublisherController(r, publisherUseCase)
+
 }

@@ -16,6 +16,14 @@ func (u *UserUsecaseImpl) GetUser(data *models.User) (bool, error) {
 	}
 	return isValid, nil
 }
+func (s UserUsecaseImpl) GetAllUser() ([]*models.AllUser, error) {
+	user, err := s.userRepo.GetAllUser()
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
 
 func InitUserUsecase(userRepo repositories.UserRepository) UserUsecase {
 	return &UserUsecaseImpl{userRepo}

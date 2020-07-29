@@ -1,7 +1,7 @@
 package response
 
 type MyResponse struct {
-	Messeage string
-	Status   int
-	Data     interface{}
+	Message string      `json:"message"`
+	Status  int         `json:"status"`
+	Result  interface{} `json:"result"`
 }

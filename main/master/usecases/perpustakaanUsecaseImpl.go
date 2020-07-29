@@ -10,8 +10,8 @@ type PerpustakaanUsecaseImpl struct {
 	PerpustakaanRepo repositories.PerpustakaanRepository
 }
 
-func (s PerpustakaanUsecaseImpl) GetAllBook() ([]*models.AllBook, error) {
-	book, err := s.PerpustakaanRepo.GetAllBook()
+func (s PerpustakaanUsecaseImpl) GetAllBook(page, limit, orderBy, sort, keyword string) ([]*models.AllBook, error) {
+	book, err := s.PerpustakaanRepo.GetAllBook(page, limit, orderBy, sort, keyword)
 	if err != nil {
 		return nil, err
 	}

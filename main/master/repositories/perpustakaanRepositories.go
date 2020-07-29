@@ -3,7 +3,7 @@ package repositories
 import "gomux/main/master/models"
 
 type PerpustakaanRepository interface {
-	GetAllBook() ([]*models.AllBook, error)
+	GetAllBook(page, limit, orderBy, sort, keyword string) ([]*models.AllBook, error)
 	GetAddBook(buku *models.Perpustakaan) error
 	GetUpdateBook(buku *models.Perpustakaan) (*models.Perpustakaan, error)
 	GetDeleteBook(idBuku string) error

@@ -3,8 +3,10 @@ package controllers
 import (
 	"encoding/json"
 	"gomux/main/master/models"
+	"gomux/main/master/response"
 	"gomux/main/master/usecases"
 	"gomux/utils"
+	"log"
 
 	"net/http"
 
@@ -20,6 +22,7 @@ func UserController(r *mux.Router, service usecases.UserUsecase) {
 
 	auth := r.PathPrefix("/auth").Subrouter()
 	auth.HandleFunc("", userHandler.getUser).Methods(http.MethodPost)
+	auth.HandleFunc("", userHandler.allUser).Methods(http.MethodGet)
 }
 
 func (u *UserHandler) getUser(w http.ResponseWriter, r *http.Request) {
@@ -33,9 +36,33 @@ func (u *UserHandler) getUser(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(w, "Failed token generation", http.StatusUnauthorized)
 		} else {
-			w.Write([]byte(token))
+			var response response.MyResponse = response.MyResponse{"Successfully Login", http.StatusOK, token}
+			byteOfUser, err := json.Marshal(response)
+			if err != nil {
+				w.Write([]byte("Oops something when wrong"))
+			}
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			w.Write(byteOfUser)
 		}
 	} else {
 		http.Error(w, "Invalid login", http.StatusUnauthorized)
 	}
+}
+
+func (s UserHandler) allUser(w http.ResponseWriter, r *http.Request) {
+	user, err := s.userUseCase.GetAllUser()
+	if err != nil {
+		w.Write([]byte("Data Not Found"))
+		log.Print(err)
+		return
+	}
+	var response response.MyResponse = response.MyResponse{"Successfully display user data", http.StatusOK, user}
+	byteOfUser, err := json.Marshal(response)
+	if err != nil {
+		w.Write([]byte("Oops something when wrong"))
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(byteOfUser)
 }

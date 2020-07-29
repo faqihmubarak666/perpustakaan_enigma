@@ -8,6 +8,7 @@ import (
 	"gomux/main/master/usecases"
 	"log"
 	"net/http"
+	"fmt"
 
 	"github.com/gorilla/mux"
 )
@@ -23,7 +24,7 @@ func PerpustakaanController(r *mux.Router, service usecases.PerpustakaanUsecase)
 
 	book := r.PathPrefix("/book").Subrouter()
 	book.Use(middleware.TokenValidationMiddleware)
-	book.HandleFunc("", perpustakaanHandler.AllBook).Methods(http.MethodGet)
+	book.HandleFunc("", perpustakaanHandler.AllBook).Queries("page","{page}", "limit", "{limit}", "orderBy", "{orderBy}", "sort", "{sort}", "keyword", "{keyword}").Methods(http.MethodGet)
 	book.HandleFunc("", perpustakaanHandler.AddBook).Methods(http.MethodPost)
 	book.HandleFunc("", perpustakaanHandler.UpdateBook).Methods(http.MethodPut)
 	book.HandleFunc("/{id_buku}", perpustakaanHandler.DeleteBook).Methods(http.MethodDelete)
@@ -33,10 +34,20 @@ func PerpustakaanController(r *mux.Router, service usecases.PerpustakaanUsecase)
 	book.HandleFunc("/findBookByPublisher/{nama_penerbit}", perpustakaanHandler.FindBookByPublisher).Methods(http.MethodGet)
 	book.HandleFunc("/ReportTotalBook", perpustakaanHandler.TotalBook).Methods(http.MethodGet)
 	book.HandleFunc("/ReportTotalBookCategory", perpustakaanHandler.TotalBookCategory).Methods(http.MethodGet)
+
+	
 }
 
 func (s PerpustakaanHandler) AllBook(w http.ResponseWriter, r *http.Request) {
-	buku, err := s.PerpustakaanUseCase.GetAllBook()
+	
+	var page string = mux.Vars(r)["page"]
+	var limit string = mux.Vars(r)["limit"]
+	var orderBy string = mux.Vars(r)["orderBy"]
+	var sort string = mux.Vars(r)["sort"]
+	var keyword string = mux.Vars(r)["keyword"]
+	fmt.Println(page, limit, orderBy, sort, keyword)
+
+	buku, err := s.PerpustakaanUseCase.GetAllBook(page, limit, orderBy, sort, keyword)
 	if err != nil {
 		w.Write([]byte("Data Not Found"))
 		log.Print(err)

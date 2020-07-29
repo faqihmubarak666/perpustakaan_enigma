@@ -12,16 +12,16 @@ type PerpustakaanRepoImpl struct {
 	db *sql.DB
 }
 
-func (s PerpustakaanRepoImpl) GetAllBook() ([]*models.AllBook, error) {
+func (s PerpustakaanRepoImpl) GetAllBook(page, limit, orderBy, sort, keyword string) ([]*models.AllBook, error) {
 	dataBuku := []*models.AllBook{}
-	query := constantaQuery.GETALLBOOK
-	data, err := s.db.Query(query)
+	query := fmt.Sprintf("select buku.id_buku, buku.judul_buku, kategori.id_kategori, kategori.nama_kategori, pengarang.id_pengarang, pengarang.nama_pengarang, penerbit.id_penerbit, penerbit.nama_penerbit from buku join kategori on buku.id_kategori=kategori.id_kategori join pengarang on buku.id_pengarang=pengarang.id_pengarang join penerbit on buku.id_penerbit=penerbit.id_penerbit where buku.judul_buku like ? ORDER BY  %s %s LIMIT  %s, %s ", orderBy, sort, page, limit) 
+	data, err := s.db.Query(query, "%"+keyword+"%")
 	if err != nil {
 		return nil, err
 	}
 	for data.Next() {
 		buku := models.AllBook{}
-		var err = data.Scan(&buku.IdBuku, &buku.JudulBuku, &buku.NamaKategori, &buku.NamaPengarang, &buku.NamaPenerbit)
+		var err = data.Scan(&buku.IdBuku, &buku.JudulBuku, &buku.IdKategori, &buku.NamaKategori, &buku.IdPengarang, &buku.NamaPengarang, &buku.IdPenerbit, &buku.NamaPenerbit)
 		if err != nil {
 			return nil, err
 		}
@@ -67,7 +67,7 @@ func (s PerpustakaanRepoImpl) GetUpdateBook(buku *models.Perpustakaan) (*models.
 		return nil, err
 	}
 	tx.Commit()
-	fmt.Println("Data Karyawan Sukses di Ubah")
+	fmt.Println("Data Sukses di Ubah")
 	return s.GetFindBookById(buku.IdBuku)
 }
 
